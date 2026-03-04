@@ -50,19 +50,20 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
   See `docs/examples/gemini/hooks.json` for a copy/paste starter that matches `.gemini/settings.json`.
 
 ## OpenCode
-- Use its plugin/hook extensibility to invoke the notifier on relevant events (e.g., session complete).
-- Skeleton plugin example (`.opencode/plugins/slackNotifier.js`):
-  ```js
-  import { exec } from "node:child_process";
-
-  export const SlackNotifierPlugin = async () => ({
-    event: async ({ event }) => {
-      if (event?.type === "session.idle") {
-        exec("/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh");
-      }
-    },
-  });
+- Preferred: install plugin package via OpenCode's official `plugin` config flow:
+  ```bash
+  npm install -g opencode-vibe-coding-slack-notifier
   ```
+  then:
+  ```json
+  {
+    "$schema": "https://opencode.ai/config.json",
+    "plugin": ["opencode-vibe-coding-slack-notifier"]
+  }
+  ```
+  See `docs/examples/opencode/opencode.json` and `docs/opencode_plugin.md`.
+- Alternative (local script plugin): use a custom `.opencode/plugins/slackNotifier.js` that shells out to
+  `/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh`.
   See `docs/examples/opencode/slackNotifier.js`.
 
 ## Copilot CLI & Cursor

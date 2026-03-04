@@ -9,6 +9,7 @@ For a detailed, step-by-step guide (setup, config, debugging, FAQs), see `docs/g
 
 For integrations with other coding agents (Codex CLI, Claude Code, Gemini CLI, OpenCode, Copilot CLI, Cursor), see `docs/integrations.md`.
 Sample config snippets live under `docs/examples/` (Codex/Claude/Gemini/OpenCode/Copilot wrapper).
+For OpenCode marketplace/npm-style plugin setup, see `docs/opencode_plugin.md`.
 
 ## Why This Slack Notifier
 - Codex has a notify hook but the VS Code extension still lacks built-in completion alerts (sound/visual); community requests for audible notifications haven’t shipped, so you must watch the editor.
@@ -61,6 +62,29 @@ Sample config snippets live under `docs/examples/` (Codex/Claude/Gemini/OpenCode
    pytest
    # Lint: ruff check .
    ```
+
+## OpenCode plugin install (official flow)
+If you use OpenCode, this repo now exposes an installable plugin package:
+
+```bash
+npm install -g opencode-vibe-coding-slack-notifier
+```
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-vibe-coding-slack-notifier"]
+}
+```
+
+Required environment variables:
+
+```bash
+export SLACK_BOT_TOKEN=xoxb-your-token-here
+export SLACK_USER_ID=U12345678
+```
+
+See `docs/opencode_plugin.md` for a full step-by-step guide.
 
 ## Payload expectations
 - The notifier builds a message from `title`, `status`, `summary`, `duration`, and `url` when present.
