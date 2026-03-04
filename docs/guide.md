@@ -1,4 +1,4 @@
-# Codex Slack Notifier – Full Guide
+# Vibe Coding Slack Notifier – Full Guide
 
 This guide walks through setup, configuration, usage, debugging, and development for sending Codex task notifications to Slack DMs.
 
@@ -15,8 +15,8 @@ This guide walks through setup, configuration, usage, debugging, and development
 
 ## Install
 ```bash
-git clone git@github.com:Wangmerlyn/Codex-Slack-Notifier.git
-cd Codex-Slack-Notifier
+git clone git@github.com:Wangmerlyn/vibe-coding-slack-notifier.git
+cd vibe-coding-slack-notifier
 conda activate codex_slack_notifier  # or your preferred env
 pip install -e '.[dev]'
 # optional
@@ -40,7 +40,7 @@ edit .env   # fill SLACK_BOT_TOKEN and SLACK_USER_ID
 Use the portable wrapper so payloads from stdin or file both work:
 ```toml
 # ~/.codex/config.toml
-notify = ["/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"]
+notify = ["/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"]
 ```
 Options:
 - Override env file location: `ENV_FILE=/path/to/.env`.

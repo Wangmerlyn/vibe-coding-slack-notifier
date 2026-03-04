@@ -1,7 +1,7 @@
-# Codex Slack Notifier
+# Vibe Coding Slack Notifier
 
-[![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/Wangmerlyn/Codex-Slack-Notifier?utm_source=oss&utm_medium=github&utm_campaign=Wangmerlyn%2FCodex-Slack-Notifier&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Wangmerlyn/Codex-Slack-Notifier)
+[![CodeRabbit Reviews](https://img.shields.io/coderabbit/prs/github/Wangmerlyn/vibe-coding-slack-notifier?utm_source=oss&utm_medium=github&utm_campaign=Wangmerlyn%2Fvibe-coding-slack-notifier&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Wangmerlyn/vibe-coding-slack-notifier)
 
 Send Codex task completion alerts straight to your Slack DMs using the Slack Web API (no webhooks).
 
@@ -17,8 +17,8 @@ Sample config snippets live under `docs/examples/` (Codex/Claude/Gemini/OpenCode
 
 ## Quick start
 1. **Clone & env**
-   - `git clone git@github.com:Wangmerlyn/Codex-Slack-Notifier.git`
-   - `cd Codex-Slack-Notifier`
+   - `git clone git@github.com:Wangmerlyn/vibe-coding-slack-notifier.git`
+   - `cd vibe-coding-slack-notifier`
    - `conda activate codex_slack_notifier` (or create it)
    - `pip install -e '.[dev]'`
    - Optional: `pre-commit install`
@@ -73,7 +73,7 @@ Sample config snippets live under `docs/examples/` (Codex/Claude/Gemini/OpenCode
 ### Debugging Codex notify (optional)
 - Use the wrapper that can read payloads from a file argument (as Codex may supply) or stdin:
   ```
-  notify = ["/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"]
+  notify = ["/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"]
   ```
 - To capture the final payload for debugging, set an env var before running Codex:
   ```

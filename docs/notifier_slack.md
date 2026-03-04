@@ -44,7 +44,7 @@ A concrete example is in `scripts/notifier/codex_notify_example.sh`.
 ### Optional debugging
 - If Codex supplies a payload file instead of stdin, use the wrapper:
   ```
-  notify = ["/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"]
+  notify = ["/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"]
   ```
 - To capture the selected payload for inspection, set:
   ```

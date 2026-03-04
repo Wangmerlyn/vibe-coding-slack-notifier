@@ -6,7 +6,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
 - Ensure `SLACK_BOT_TOKEN` and `SLACK_USER_ID` are available (via `.env` or exported env vars).
 - Use the wrapper for robustness across stdin/file/inline payloads:
   ```
-  /path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh
+  /path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh
   ```
 - Optionally capture the payload for debugging:
   ```
@@ -24,7 +24,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
         {
           "matcher": "*",
           "hooks": [
-            { "type": "command", "command": "/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh" }
+            { "type": "command", "command": "/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh" }
           ]
         }
       ]
@@ -41,7 +41,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
       "Stop": [
         {
           "type": "command",
-          "command": "/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"
+          "command": "/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"
         }
       ]
     }
@@ -58,7 +58,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
   export const SlackNotifierPlugin = async () => ({
     event: async ({ event }) => {
       if (event?.type === "session.idle") {
-        exec("/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh");
+        exec("/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh");
       }
     },
   });
@@ -69,7 +69,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
 - No native hooks today. Workaround: wrap the CLI call and invoke the notifier afterward:
   ```bash
   copilot "$@"
-  /path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh
+  /path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh
   ```
   See `docs/examples/copilot_wrapper.sh` for a minimal wrapper.
 
@@ -78,7 +78,7 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
   ```toml
   model = "<YOUR_CODEX_MODEL_ID>"   # replace with your Codex model id
   model_reasoning_effort = "high"
-  notify = ["/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"]
+  notify = ["/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"]
   ```
   See `docs/examples/codex/config.toml` for a full sample. Optional flags: `DEBUG_CODEX_PAYLOAD` (capture payload) and `ENV_FILE` (alternate env path).
 
