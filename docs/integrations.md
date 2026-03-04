@@ -54,6 +54,14 @@ Many coding-agent CLIs expose hooks or plugin points that can run shell commands
   ```bash
   npm install -g opencode-vibe-coding-slack-notifier
   ```
+  then create credentials file:
+  ```bash
+  mkdir -p ~/.config/opencode
+  cat > ~/.config/opencode/slack-notifier.env <<'EOF'
+  SLACK_BOT_TOKEN=xoxb-your-token-here
+  SLACK_USER_ID=U12345678
+  EOF
+  ```
   then:
   ```json
   {

@@ -77,14 +77,17 @@ npm install -g opencode-vibe-coding-slack-notifier
 }
 ```
 
-Required environment variables:
+Recommended credentials setup (no shell export needed):
 
 ```bash
-export SLACK_BOT_TOKEN=xoxb-your-token-here
-export SLACK_USER_ID=U12345678
+mkdir -p ~/.config/opencode
+cat > ~/.config/opencode/slack-notifier.env <<'EOF'
+SLACK_BOT_TOKEN=xoxb-your-token-here
+SLACK_USER_ID=U12345678
+EOF
 ```
 
-See `docs/opencode_plugin.md` for a full step-by-step guide.
+The plugin auto-loads this file. See `docs/opencode_plugin.md` for full setup and advanced options.
 
 ## Payload expectations
 - The notifier builds a message from `title`, `status`, `summary`, `duration`, and `url` when present.

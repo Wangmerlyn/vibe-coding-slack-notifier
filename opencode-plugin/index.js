@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 const SLACK_API_BASE = "https://slack.com/api";
 const DEFAULT_TIMEOUT_MS = 10_000;
 const MAX_ATTEMPTS = 2;
@@ -8,6 +11,8 @@ const warned = {
 };
 
 const lastSessionNotifyAt = new Map();
+let envInitialized = false;
+let loadedEnvFile = null;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,6 +35,73 @@ function parseRetryAfterMs(retryAfterHeader) {
     return 1_000;
   }
   return Math.max(1_000, Math.ceil(parsed * 1_000));
+}
+
+function resolveEnvFileCandidates() {
+  const candidates = [];
+  if (process.env.OPENCODE_SLACK_ENV_FILE) {
+    candidates.push(process.env.OPENCODE_SLACK_ENV_FILE);
+  }
+
+  if (process.env.HOME) {
+    candidates.push(path.join(process.env.HOME, ".config", "opencode", "slack-notifier.env"));
+  }
+
+  return candidates;
+}
+
+function sanitizeEnvValue(raw) {
+  const value = raw.trim();
+  if (
+    (value.startsWith("\"") && value.endsWith("\"")) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+function loadEnvFileIfNeeded() {
+  if (envInitialized) {
+    return;
+  }
+  envInitialized = true;
+
+  for (const candidate of resolveEnvFileCandidates()) {
+    if (!candidate || !fs.existsSync(candidate) || !fs.statSync(candidate).isFile()) {
+      continue;
+    }
+
+    try {
+      const content = fs.readFileSync(candidate, "utf8");
+      for (const line of content.split(/\r?\n/)) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith("#")) {
+          continue;
+        }
+
+        const normalized = trimmed.startsWith("export ") ? trimmed.slice(7).trim() : trimmed;
+        const eq = normalized.indexOf("=");
+        if (eq <= 0) {
+          continue;
+        }
+
+        const key = normalized.slice(0, eq).trim();
+        const value = sanitizeEnvValue(normalized.slice(eq + 1));
+        if (key && value && !process.env[key]) {
+          process.env[key] = value;
+        }
+      }
+
+      loadedEnvFile = candidate;
+      return;
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[opencode-vibe-coding-slack-notifier] Failed to read env file ${candidate}: ${detail}`,
+      );
+    }
+  }
 }
 
 function shouldNotify(event, debounceMs) {
@@ -128,13 +200,17 @@ export const OpenCodeSlackNotifierPlugin = async ({ directory, worktree }) => {
         return;
       }
 
+      loadEnvFileIfNeeded();
       const token = process.env.SLACK_BOT_TOKEN;
       const userId = process.env.SLACK_USER_ID;
       if (!token || !userId) {
         if (!warned.missingEnv) {
           warned.missingEnv = true;
+          const sourceHint = loadedEnvFile
+            ? `Loaded env file: ${loadedEnvFile}.`
+            : "No env file found.";
           console.warn(
-            "[opencode-vibe-coding-slack-notifier] Missing SLACK_BOT_TOKEN or SLACK_USER_ID; skipping notification.",
+            `[opencode-vibe-coding-slack-notifier] Missing SLACK_BOT_TOKEN or SLACK_USER_ID; skipping notification. ${sourceHint} Set env vars directly or provide OPENCODE_SLACK_ENV_FILE.`,
           );
         }
         return;

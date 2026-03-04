@@ -7,9 +7,27 @@ This repository now exposes an installable OpenCode plugin package:
 
 The plugin sends Slack DM notifications when OpenCode emits `session.idle`.
 
-## 1) Configure environment variables
+## 1) Configure Slack credentials (recommended: env file, no manual export)
 
-Set these in your shell profile (`~/.zshrc` / `~/.bashrc`) or OpenCode launch environment:
+Create `~/.config/opencode/slack-notifier.env`:
+
+```bash
+mkdir -p ~/.config/opencode
+cat > ~/.config/opencode/slack-notifier.env <<'EOF'
+SLACK_BOT_TOKEN=xoxb-your-token-here
+SLACK_USER_ID=U12345678
+EOF
+```
+
+The plugin auto-loads this file on first use.
+
+If you want a custom path, set:
+
+```bash
+export OPENCODE_SLACK_ENV_FILE=/absolute/path/to/slack-notifier.env
+```
+
+You can still use direct environment variables if preferred:
 
 ```bash
 export SLACK_BOT_TOKEN=xoxb-your-token-here
@@ -69,4 +87,5 @@ Start any OpenCode task and wait for the session to become idle; the plugin will
 
 - `missing_scope`: ensure Slack app includes `chat:write` and `im:write`/`conversations:write`, then reinstall app to workspace.
 - No message received: verify `SLACK_BOT_TOKEN` and `SLACK_USER_ID` are exported in the same environment where OpenCode runs.
+- No message received: confirm credentials exist in `~/.config/opencode/slack-notifier.env` or set `OPENCODE_SLACK_ENV_FILE`.
 - Repeated messages: increase `OPENCODE_SLACK_DEBOUNCE_MS`.

@@ -26,3 +26,5 @@ def test_opencode_plugin_files_exist() -> None:
     assert "conversations.open" in js_source
     assert "chat.postMessage" in js_source
     assert "export default OpenCodeSlackNotifierPlugin" in js_source
+    assert "OPENCODE_SLACK_ENV_FILE" in js_source
+    assert '.config", "opencode", "slack-notifier.env' in js_source
