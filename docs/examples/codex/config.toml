@@ -1,6 +1,6 @@
 model = "<YOUR_CODEX_MODEL_ID>"
 model_reasoning_effort = "high"
-notify = ["/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh"]
+notify = ["/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh"]
 
 # Optional:
 # DEBUG_CODEX_PAYLOAD=/tmp/codex_payload.json   # capture payload used

@@ -3,5 +3,5 @@ set -euo pipefail
 
 copilot "$@"
 copilot_exit=$?
-/path/to/Codex-Slack-Notifier/scripts/notifier/codex_notify_wrapper.sh
+/path/to/vibe-coding-slack-notifier/scripts/notifier/codex_notify_wrapper.sh
 exit "$copilot_exit"
