@@ -227,6 +227,12 @@ def _load_env_file(env_file: str) -> None:
             continue
         key, value = stripped.split("=", 1)
         key, value = key.strip(), value.strip()
+        # Strip surrounding quotes to match JS plugin behavior
+        if len(value) >= 2 and (
+            (value.startswith('"') and value.endswith('"'))
+            or (value.startswith("'") and value.endswith("'"))
+        ):
+            value = value[1:-1]
         if key and value and key not in os.environ:
             os.environ[key] = value
 
@@ -237,8 +243,16 @@ def main(argv: Optional[list[str]] = None) -> int:
     logging.basicConfig(level=level, format="%(levelname)s %(message)s")
 
     env_file_to_load = args.env_file
-    if not env_file_to_load and Path(".env").exists():
-        env_file_to_load = ".env"
+    if not env_file_to_load:
+        # Only auto-load .env from the user's home directory config or the
+        # script's own directory — avoid loading from an arbitrary CWD which
+        # could be an untrusted directory.
+        home_env = Path.home() / ".config" / "codex-slack-notifier" / ".env"
+        script_dir_env = Path(__file__).resolve().parent.parent.parent / ".env"
+        for candidate in (home_env, script_dir_env):
+            if candidate.is_file():
+                env_file_to_load = str(candidate)
+                break
 
     if env_file_to_load:
         try:

@@ -79,10 +79,21 @@ if isinstance(chosen, dict):
             chosen["repo"] = fallback_repo
 out = json.dumps(chosen)
 if debug_path:
-    try:
-        pathlib.Path(debug_path).write_text(out + "\n", encoding="utf-8")
-    except OSError as exc:
-        print(f"DEBUG_CODEX_PAYLOAD write failed: {exc}", file=sys.stderr)
+    dp = pathlib.Path(debug_path).resolve()
+    # Only allow writing to /tmp or a path under the repo root to prevent
+    # arbitrary file overwrites via the DEBUG_CODEX_PAYLOAD env var.
+    allowed = False
+    if str(dp).startswith("/tmp"):
+        allowed = True
+    elif repo_root and str(dp).startswith(str(pathlib.Path(repo_root).resolve())):
+        allowed = True
+    if allowed:
+        try:
+            dp.write_text(out + "\n", encoding="utf-8")
+        except OSError as exc:
+            print(f"DEBUG_CODEX_PAYLOAD write failed: {exc}", file=sys.stderr)
+    else:
+        print(f"DEBUG_CODEX_PAYLOAD path '{debug_path}' is outside allowed directories, skipping", file=sys.stderr)
 sys.stdout.write(out)
 PY
 }
